@@ -1,0 +1,51 @@
+"""
+#include<iostream>
+#include<vector>
+using namespace std;
+
+vector<vector<int>> adj_list(20001, vector<int>());
+vector<bool> is_visited(20001, 0);
+vector<bool> group(20001, 0);
+
+int v, e;
+
+bool isBipartite(int v, int g){
+    group[v] = g;
+    for(int i = 0; i < adj_list[v].size(); i++){
+        if(!is_visited[adj_list[v][i]]){
+            is_visited[adj_list[v][i]] = 1;
+            if(!isBipartite(adj_list[v][i], !g)) return false;
+        }
+        else if(group[adj_list[v][i]] == g) return false;
+    }
+    return true;
+}
+bool isBipartiteAll(){
+    for(int i = 1; i <= v; i++){
+        if(is_visited[i]) continue;
+        is_visited[i] = 1;
+        if(!isBipartite(i, 0)) return false;
+        group.assign(20001,0);
+    }
+    return true;
+}
+
+int main(){
+    int k;
+    cin >>k;
+    for(int i = 0; i < k; i++){
+        cin >> v >> e;
+        adj_list.assign(20001,vector<int>());
+        is_visited.assign(20001,0);
+        group.assign(20001,0);
+        while(e--){
+            int a, b;
+            cin >> a >> b;
+            adj_list[a].push_back(b);
+            adj_list[b].push_back(a);
+        }
+        if(isBipartiteAll()) cout << "YES\n";
+        else cout << "NO\n";
+    }
+}
+"""
